@@ -1,8 +1,15 @@
 #include "Actor.h"
 #include "StudentWorld.h"
+#include "GameConstants.h"
 
 // Students:  Add code to this file (if you wish), Actor.h, StudentWorld.h, and StudentWorld.cpp
-
+Actor::Actor(int imageID, int startX, int startY, Direction dir , double size, unsigned int depth):GraphObject(imageID,startX,startY,dir,size,depth)
+{
+}
+StudentWorld* Actor::getWorld()
+{
+    return m_s;
+}
 
 
 
@@ -30,7 +37,23 @@ void FrackMan::doSomething()
 {
     if (geth() == 0)
         return;
-    if ()
+    int ch;
+    if (getWorld()->getKey(ch) == true)
+    {
+            switch(ch)// user hit a key this tick! switch (ch)
+            {
+            case KEY_PRESS_LEFT:
+                    moveTo(getX()-1,getY());
+                    break;
+            case KEY_PRESS_RIGHT:
+                    moveTo(getX()+1,getY());
+                    break;
+            case KEY_PRESS_UP:
+                    moveTo(getX(),getY()+1);
+            case KEY_PRESS_DOWN:
+                    moveTo(getX(),getY()-1);
+            }
+    }
 }
 
 
