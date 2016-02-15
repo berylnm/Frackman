@@ -1,45 +1,58 @@
-#ifndef STUDENTWORLD_H_
-#define STUDENTWORLD_H_
-
-#include "GameWorld.h"
-#include "GameConstants.h"
-#include <string>
+#include "StudentWorld.h"
 #include "Actor.h"
-#include <list>
+#include <string>
 using namespace std;
-// Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
 
-class StudentWorld : public GameWorld
+void askactortodosth(Actor* a);
+GameWorld* createStudentWorld(string assetDir)
 {
-public:
-    StudentWorld(std::string assetDir)
-    : GameWorld(assetDir)
-    {
-    }
-    
-    virtual int init();
-    /*{
-     return GWSTATUS_CONTINUE_GAME;
-     }*/
-    
-    virtual int move();
-    /*{
-     // This code is here merely to allow the game to build, run, and terminate after you hit enter a few times.
-     // Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
-     decLives();
-     return GWSTATUS_PLAYER_WON;
-     }*/
-    
-    virtual void cleanUp()
-    {
-    }
-    void cleanf(int x,int y);
-    
-    
-private:
-    list <Actor*> m_actor;
-    FrackMan* m_frackman;
-    Dirt* m_dirt[64][60];
-};
+    return new StudentWorld(assetDir);
+}
 
-#endif // STUDENTWORLD_H_
+// Students:  Add code to this file (if you wish), StudentWorld.h, Actor.h and Actor.cpp
+
+int StudentWorld::init()
+{
+    for (int i=0; i<64; i++)
+    {   if (i>=30 && i<=33)
+    {
+        for (int j=0; j<4; j++)
+        {
+            m_dirt[i][j]= new Dirt(i,j,this);
+        }
+    }
+    else
+    {   for (int j=0; j<60; j++)
+        {
+        m_dirt[i][j] = new Dirt(i,j,this);
+        }
+        
+        }
+    }
+    m_frackman = new FrackMan(this);
+    return 1;
+}
+int StudentWorld::move()
+{
+    askactortodosth(m_frackman);
+    cleanf(m_frackman->getX(),m_frackman->getY());
+    decLives();
+    return GWSTATUS_CONTINUE_GAME ;
+    
+}
+void askactortodosth(Actor* a)
+{
+    a->doSomething();
+}
+void StudentWorld::cleanf(int x, int y)
+{
+    for (int i=0;x+i<64&&i<=3;i++)
+    {   for (int j=0; y+j<60&&j<=3; j++)
+        {
+            if (m_dirt[x+i][y+j] != nullptr)
+            {    delete m_dirt[x+i][y+j];
+                m_dirt[x+i][y+j]= nullptr;
+            }
+        }
+    }
+}
