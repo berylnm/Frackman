@@ -9,9 +9,9 @@ class StudentWorld;
 class Actor : public GraphObject
 {
     public:
-        Actor(int imageID, int startX, int startY, Direction dir = right, double size = 1.0, unsigned int depth = 0);
+        Actor(int imageID, int startX, int startY,StudentWorld*s,Direction dir = right, double size = 1.0, unsigned int depth = 0);
         ~Actor(){}
-        void doSomething();
+        virtual void doSomething();
         StudentWorld* getWorld();
     private:
         StudentWorld* m_s;
@@ -21,7 +21,7 @@ class Actor : public GraphObject
 class People : public Actor
 {
     public:
-        People(int imageID,int startX, int startY, Direction dir,int hit);
+        People(int imageID,int startX, int startY,StudentWorld*s, Direction dir,int hit);
         ~People(){}
         int geth() const;
         void beannoyed();
@@ -33,9 +33,10 @@ class People : public Actor
 class FrackMan : public People
 {
     public:
-        FrackMan();
+        FrackMan(StudentWorld*s);
         ~FrackMan(){}
         virtual void doSomething();
+        bool movable(int x, int y, int ch);
     private:
         int m_squirt;
         int m_gold;
@@ -45,7 +46,7 @@ class FrackMan : public People
 class Dirt : public Actor
 {
     public:
-        Dirt(int startX, int startY);
+        Dirt(int startX, int startY,StudentWorld*s);
         ~Dirt(){}
 };
 
