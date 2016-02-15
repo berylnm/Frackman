@@ -1,44 +1,75 @@
-#ifndef STUDENTWORLD_H_
-#define STUDENTWORLD_H_
+#ifndef ACTOR_H_
+#define ACTOR_H_
 
-#include "GameWorld.h"
-#include "GameConstants.h"
-#include <string>
-#include "Actor.h"
-#include <list>
-using namespace std;
-// Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
+#include "GraphObject.h"
+class StudentWorld;
+// Students:  Add code to this file, Actor.cpp, StudentWorld.h, and StudentWorld.cpp
 
-class StudentWorld : public GameWorld
+
+class Actor : public GraphObject
 {
-public:
-	StudentWorld(std::string assetDir)
-	 : GameWorld(assetDir)
-	{
-    }
-
-    virtual int init();
-	/*{
-		return GWSTATUS_CONTINUE_GAME;
-	}*/
-
-    virtual int move();
-	/*{
-		  // This code is here merely to allow the game to build, run, and terminate after you hit enter a few times.
-		  // Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
-		decLives();
-        return GWSTATUS_PLAYER_WON;
-    }*/
-
-	virtual void cleanUp()
-	{
-	}
+    public:
+        Actor(int imageID, int startX, int startY,StudentWorld*s,Direction dir = right, double size = 1.0, unsigned int depth = 0);
+        ~Actor(){}
+        virtual void doSomething();
+        StudentWorld* getWorld();
+    private:
+        StudentWorld* m_s;
     
-
-private:
-    list <Actor*> m_actor;
-    FrackMan* m_frackman;
-    Dirt* m_dirt[64][60];
 };
 
-#endif // STUDENTWORLD_H_
+class People : public Actor
+{
+    public:
+        People(int imageID,int startX, int startY,StudentWorld*s, Direction dir,int hit);
+        ~People(){}
+        int geth() const;
+        void beannoyed();
+        void boulderhit();
+    
+    private:
+        int m_h;
+};
+class FrackMan : public People
+{
+    public:
+        FrackMan(StudentWorld*s);
+        ~FrackMan(){}
+        virtual void doSomething();
+    private:
+        int m_squirt;
+        int m_gold;
+        int m_sonar;
+};
+
+class Dirt : public Actor
+{
+    public:
+        Dirt(int startX, int startY,StudentWorld*s);
+        ~Dirt(){}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endif // ACTOR_H_
