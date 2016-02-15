@@ -22,22 +22,23 @@ public:
 		return GWSTATUS_CONTINUE_GAME;
 	}*/
 
-    virtual int move()
-	{
+    virtual int move();
+	/*{
 		  // This code is here merely to allow the game to build, run, and terminate after you hit enter a few times.
 		  // Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
 		decLives();
         return GWSTATUS_PLAYER_WON;
-    }
+    }*/
 
 	virtual void cleanUp()
 	{
 	}
+    
 
 private:
-    list <Actor*> actor;
-    FrackMan* frackman;
-    Dirt* dirt[64][60];
+    list <Actor*> m_actor;
+    FrackMan* m_frackman;
+    Dirt* m_dirt[64][60];
 };
 
 #endif // STUDENTWORLD_H_
