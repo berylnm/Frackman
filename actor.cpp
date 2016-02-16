@@ -37,9 +37,11 @@ void FrackMan::doSomething()
     if (geth() == 0)
         return;
     int ch;
+    if (getWorld()->cleanf(getX(),getY()))
+        getWorld()->playSound(SOUND_DIG);
+
     if (getWorld()->getKey(ch) == true)
     {
-        if (movable(getX(),getY(),ch))
         {switch(ch)// user hit a key this tick! switch (ch)
             {
                 case KEY_PRESS_LEFT:
@@ -47,38 +49,42 @@ void FrackMan::doSomething()
                     {    setDirection(left);
                         moveTo(getX(),getY());
                     }
+                    else if (movable(getX(),getY(),ch))
+                        moveTo(getX()-1,getY());
                     else
-                    moveTo(getX()-1,getY());
+                        moveTo(getX(),getY());
                     break;
                 case KEY_PRESS_RIGHT:
                     if (getDirection()!=right)
                     {    setDirection(right);
                         moveTo(getX(),getY());
                     }
-                    moveTo(getX()+1,getY());
+                    else if (movable(getX(),getY(),ch))
+                        moveTo(getX()+1,getY());
+                    else
+                        moveTo(getX(),getY());
                     break;
                 case KEY_PRESS_UP:
                     if (getDirection()!=up)
                     {    setDirection(up);
                         moveTo(getX(),getY());
                     }
-
-                    moveTo(getX(),getY()+1);
+                    else if (movable(getX(),getY(),ch))
+                        moveTo(getX(),getY()+1);
+                    else
+                        moveTo(getX(),getY());
                     break;
                 case KEY_PRESS_DOWN:
                     if (getDirection()!=down)
                     {    setDirection(down);
                         moveTo(getX(),getY());
                     }
-
-                    moveTo(getX(),getY()-1);
+                    else if (movable(getX(),getY(),ch))
+                        moveTo(getX(),getY()-1);
+                    else
+                        moveTo(getX(),getY());
                     break;
-            }
-        }
-        else
-        {
-            moveTo(getX(),getY());
-        }
+
     }
     
     
@@ -100,7 +106,7 @@ bool FrackMan::movable(int x, int y, int ch)
             break;
             
     }
-    if (x>=0 && x<62 && y>=0 && y<60)
+    if (x>=0 && x<=60 && y>=0 && y<=60)
         return true;
     return false;
 }
