@@ -35,8 +35,7 @@ int StudentWorld::init()
 int StudentWorld::move()
 {
     askactortodosth(m_frackman);
-    if (cleanf(m_frackman->getX(),m_frackman->getY()))
-        playSound(SOUND_DIG);
+  
     decLives();
     return GWSTATUS_CONTINUE_GAME ;
     
