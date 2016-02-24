@@ -9,90 +9,143 @@ class StudentWorld;
 class Actor : public GraphObject
 {
     public:
-        Actor(int imageID, int startX, int startY,StudentWorld*s,int state,Direction dir = right, double size = 1.0, unsigned int depth = 0);
+        Actor(int imageID, int startX, int startY,StudentWorld*s,int state,char name, Direction dir = right, double size = 1.0, unsigned int depth = 0);
         ~Actor(){}
-        virtual void doSomething();
+        virtual void doSomething() = 0;
         int getState() const;
+        void setState(int state);
         void setdead();
+        void setlife(int a);
+        int getlife() const;
+        virtual void beannoyed(char c){}
+    virtual void stare(){}
+        virtual bool movable(int&a, int&b, Direction dir);
         StudentWorld* getWorld();
+        char getname();
     
     private:
         StudentWorld* m_s;
         int m_state;            //0:dead 1:temporary 2:permanent 3:waiting
+        int m_h;
+        char m_n;               //'F' frackman  'P' pool 'S' sonar 'T' boulder 'G' gold 'B' barrel
+                                //'D' dirt
     
 };
+
+void supposemove(int &x, int &y, Actor::Direction dir);
 
 class People : public Actor
 {
     public:
-        People(int imageID,int startX, int startY,StudentWorld*s, Direction dir,int hit);
+        People(int imageID,int startX, int startY,StudentWorld*s,char name, Direction dir);
         ~People(){}
-        bool isalive();
         void beannoyed(char ch);
+        virtual void annoy() = 0;
+       
         //virtual void attck() ;
     
-    private:
-        int m_h;
+    
 };
+
 class FrackMan : public People
 {
     public:
         FrackMan(StudentWorld*s);
         ~FrackMan(){}
         virtual void doSomething();
-        bool movable(int x, int y, int ch);
+        bool movable(int x, int y, Direction dir);
+        void getsgs(char c);
+        void annoy();
+        void attck();
+        int getsquirt() const {return m_squirt;}
+        int getgold() const {return m_gold;}
+        int getsonar() const {return m_sonar;}
     private:
         int m_squirt;
         int m_gold;
         int m_sonar;
 };
-class Protester : public People
+class Protester: public People
 {
     public:
-        Protester(StudentWorld *s);
-        ~Protester();
+        Protester(int imageID, StudentWorld*s, char name);
+        ~Protester(){}
+        void commonA();
+        void stare();
+    
+    private:
+        void basicaction();
+        void annoy();
+        bool yell();
+        void runsoutstep();
+        bool chase();
+        bool intersection();
+    
+        int m_tick;
+        int numStep;
+        int shouting;
+        int perpendicular;
     
 };
 class Regularp : public Protester
 {
-    
+    public:
+        Regularp(StudentWorld *s);
+        ~Regularp(){}
+        void doSomething();
 };
 class Hardcorep: public Protester
 {
+    public:
+        Hardcorep(StudentWorld *s);
+        ~Hardcorep(){}
+        void doSomething();
+    
     
 };
 class Goodies : public Actor
 {
     public:
-        Goodies(StudentWorld *s);
-        ~Goodies();
+        Goodies(int image, int x, int y, StudentWorld *s,int state,char name);
+        ~Goodies(){}
     private:
     
 
 };
 class Barrel: public Goodies
 {
+    public:
+        Barrel(int x, int y, StudentWorld* s);
+        ~Barrel(){}
+        void doSomething();
     
 };
 class Gold: public Goodies
 {
-    
+    public:
+        Gold(int x, int y, StudentWorld *s, int state);
+        ~Gold(){}
+        void doSomething();
 };
-
-class Plsn : public Goodies
+class Tempic: public Goodies
 {
     public:
-        Plsn(StudentWorld *s);
-        ~Plsn();
-    private:
+        Tempic(int image,int x, int y,StudentWorld *s,char name);
+        ~Tempic(){}
+        void doSomething();
+    
 };
-class Sonar: public Plsn
+class Sonar: public Tempic
 {
-    Sonar(StudentWorld *s);
-    ~Sonar();
+    public:
+        Sonar(StudentWorld* s);
+        ~Sonar(){}
 };
-class Pool: public Plsn
+class Pool: public Tempic
 {
+    public:
+        Pool(int x, int y, StudentWorld* s);
+        ~Pool(){}
     
 };
 class Squirt : public Actor
@@ -121,23 +174,8 @@ class Dirt : public Actor
     public:
         Dirt(int startX, int startY,StudentWorld*s);
         ~Dirt(){}
+        void doSomething(){};
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
